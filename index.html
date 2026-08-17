@@ -6,17 +6,15 @@
 <title>LORCA Orca Runner 3D | LethalOrca</title>
 <style>
   :root{
-    --abyss:#030814;
-    --panel:#081226;
-    --panel2:#0e1d3a;
+    --abyss:#010712;
+    --panel:#061024;
+    --panel2:#0a1836;
     --teal:#00f2fe;
-    --teal-dim:#00828a;
     --gold:#ffb703;
-    --gold-dim:#9e7200;
     --danger:#ff0055;
     --text:#f0f6fc;
-    --muted:#64748b;
-    --line:rgba(0,242,254,0.25);
+    --muted:#546e7a;
+    --line:rgba(0,242,254,0.3);
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{margin:0; padding:0; width:100%; height:100%; overflow:hidden; background:var(--abyss); font-family:'Segoe UI',system-ui,sans-serif; color:var(--text);}
@@ -24,41 +22,26 @@
   canvas{display:block; width:100%; height:100%;}
 
   /* HUD */
-  #hud{position:fixed; top:0; left:0; right:0; padding:16px 20px; display:flex; justify-content:space-between; align-items:flex-start; pointer-events:none; z-index:20; font-family:'Consolas','SFMono-Regular',monospace;}
-  .hud-pill{background:linear-gradient(180deg, rgba(8,18,38,0.92), rgba(3,8,20,0.88)); border:1px solid var(--line); border-radius:14px; padding:10px 16px; backdrop-filter:blur(8px); box-shadow:0 0 20px rgba(0,242,254,0.15);}
-  .hud-left{display:flex; flex-direction:column; gap:6px;}
-  .hud-right{display:flex; flex-direction:column; gap:6px; align-items:flex-end;}
-  .balance-row{display:flex; align-items:center; gap:8px; font-size:16px; font-weight:800; color:var(--gold); letter-spacing:0.5px;}
-  .balance-row .coin-dot{width:12px; height:12px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #fff2c4, var(--gold) 60%, var(--gold-dim)); box-shadow:0 0 10px var(--gold);}
-  .sub-row{font-size:11px; color:var(--muted); letter-spacing:0.5px;}
-  .sub-row b{color:var(--teal);}
-  #levelBadge{font-size:12px; font-weight:800; color:var(--teal); border:1px solid var(--teal); padding:4px 12px; border-radius:999px; background:rgba(0,242,254,0.1); box-shadow:0 0 10px rgba(0,242,254,0.2);}
-  #distanceRow{font-size:12px; color:var(--muted); margin-top:2px;}
-
-  /* Floating rewards */
-  .float-reward{position:absolute; font-weight:900; font-size:26px; color:var(--gold); text-shadow:0 0 16px rgba(255,183,3,0.9); pointer-events:none; z-index:30; animation:floatUp 0.8s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;}
-  @keyframes floatUp{0%{opacity:0; transform:translateY(0) scale(0.5);} 20%{opacity:1; transform:translateY(-15px) scale(1.3);} 100%{opacity:0; transform:translateY(-80px) scale(1);}}
+  #hud{position:fixed; top:0; left:0; right:0; padding:16px 24px; display:flex; justify-content:space-between; align-items:flex-start; pointer-events:none; z-index:20; font-family:'Consolas',monospace;}
+  .hud-pill{background:rgba(6,16,36,0.85); border:1px solid var(--line); border-radius:14px; padding:10px 18px; backdrop-filter:blur(10px); box-shadow:0 0 25px rgba(0,242,254,0.2);}
+  .balance-row{display:flex; align-items:center; gap:10px; font-size:18px; font-weight:800; color:var(--gold);}
+  .balance-row .coin-dot{width:14px; height:14px; border-radius:50%; background:radial-gradient(circle, #fff, var(--gold)); box-shadow:0 0 12px var(--gold);}
+  #levelBadge{font-size:13px; font-weight:800; color:var(--teal); border:1px solid var(--teal); padding:4px 14px; border-radius:999px; background:rgba(0,242,254,0.12);}
 
   /* Overlays */
-  .overlay{position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; background:radial-gradient(circle at 50% 30%, rgba(8,18,38,0.7), rgba(3,8,20,0.96)); backdrop-filter:blur(6px);}
+  .overlay{position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; background:radial-gradient(circle at 50% 40%, rgba(6,16,36,0.75), rgba(1,7,18,0.98)); backdrop-filter:blur(8px);}
   .hidden{display:none !important;}
-  .panel{width:min(440px, 92vw); background:linear-gradient(180deg, var(--panel), var(--panel2)); border:1px solid var(--line); border-radius:24px; padding:28px; box-shadow:0 0 50px rgba(0,242,254,0.2), inset 0 1px 0 rgba(255,255,255,0.08); max-height:88vh; overflow-y:auto;}
-  .brand{text-align:center; margin-bottom:12px;}
-  .brand .title{font-size:28px; font-weight:900; letter-spacing:1.5px; background:linear-gradient(90deg, var(--teal), var(--gold)); -webkit-background-clip:text; background-clip:text; color:transparent; text-shadow:0 0 20px rgba(0,242,254,0.3);}
-  .brand .sub{font-size:11px; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-top:4px;}
-  .orca-emblem{width:80px; height:80px; margin:10px auto; display:flex; align-items:center; justify-content:center; border-radius:50%; background:radial-gradient(circle at 35% 30%, #00f2fe33, #030814); border:2px solid var(--teal); font-size:42px; box-shadow:0 0 20px rgba(0,242,254,0.3);}
+  .panel{width:min(460px, 92vw); background:linear-gradient(180deg, var(--panel), var(--panel2)); border:1px solid var(--line); border-radius:24px; padding:32px; box-shadow:0 0 60px rgba(0,242,254,0.25);}
+  .brand{text-align:center; margin-bottom:16px;}
+  .brand .title{font-size:30px; font-weight:900; letter-spacing:1.5px; background:linear-gradient(90deg, var(--teal), var(--gold)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .orca-emblem{width:86px; height:86px; margin:12px auto; display:flex; align-items:center; justify-content:center; border-radius:50%; background:radial-gradient(circle, rgba(0,242,254,0.2), #010712); border:2px solid var(--teal); font-size:46px; box-shadow:0 0 25px rgba(0,242,254,0.4);}
 
-  .menu-btn{display:flex; align-items:center; justify-content:space-between; width:100%; padding:16px 20px; margin-top:12px; border-radius:16px; border:1px solid var(--line); background:linear-gradient(180deg, rgba(0,242,254,0.08), rgba(0,242,254,0.02)); color:var(--text); font-size:15px; font-weight:800; cursor:pointer; transition:0.2s cubic-bezier(0.2, 0.8, 0.2, 1); letter-spacing:0.5px;}
-  .menu-btn:hover{border-color:var(--teal); background:linear-gradient(180deg, rgba(0,242,254,0.25), rgba(0,242,254,0.05)); transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,242,254,0.2);}
-  .menu-btn.primary{background:linear-gradient(90deg, #00f2fe, #0072ff); color:#030814; border:none; box-shadow:0 0 25px rgba(0,242,254,0.4);}
-  .menu-btn.primary:hover{filter:brightness(1.15); transform:scale(1.02);}
-  .menu-btn.gold{background:linear-gradient(90deg, var(--gold), #ff8800); color:#1a0f00; border:none; box-shadow:0 0 20px rgba(255,183,3,0.3);}
+  .menu-btn{display:flex; align-items:center; justify-content:space-between; width:100%; padding:16px 20px; margin-top:12px; border-radius:16px; border:1px solid var(--line); background:rgba(0,242,254,0.05); color:var(--text); font-size:16px; font-weight:800; cursor:pointer; transition:0.25s;}
+  .menu-btn:hover{border-color:var(--teal); background:rgba(0,242,254,0.2); transform:translateY(-2px); box-shadow:0 0 20px rgba(0,242,254,0.3);}
+  .menu-btn.primary{background:linear-gradient(90deg, #00f2fe, #0072ff); color:#010712; border:none; box-shadow:0 0 30px rgba(0,242,254,0.5);}
 
-  #pauseBtn{position:fixed; top:16px; right:16px; z-index:22; width:40px; height:40px; border-radius:50%; border:1px solid var(--line); background:rgba(8,18,38,0.85); color:var(--teal); font-size:16px; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 0 15px rgba(0,242,254,0.2);}
+  #pauseBtn{position:fixed; top:18px; right:18px; z-index:22; width:44px; height:44px; border-radius:50%; border:1px solid var(--line); background:rgba(6,16,36,0.85); color:var(--teal); font-size:18px; display:flex; align-items:center; justify-content:center; cursor:pointer;}
   #touchZone{position:fixed; inset:0; z-index:15; touch-action:none;}
-  #mobileHint{position:fixed; bottom:24px; left:0; right:0; text-align:center; font-size:12px; font-weight:700; color:var(--teal); z-index:20; letter-spacing:1px; pointer-events:none; text-shadow:0 0 8px rgba(0,242,254,0.8);}
-  #toast{position:fixed; top:80px; left:50%; transform:translateX(-50%); background:rgba(8,18,38,0.95); border:1px solid var(--teal); color:var(--teal); padding:10px 24px; border-radius:999px; font-size:13px; font-weight:800; z-index:40; opacity:0; transition:opacity .3s, transform .3s; pointer-events:none; box-shadow:0 0 20px rgba(0,242,254,0.4);}
-  #toast.show{opacity:1; transform:translateX(-50%) translateY(5px);}
 </style>
 </head>
 <body>
@@ -67,130 +50,93 @@
 
 <!-- HUD -->
 <div id="hud" class="hidden">
-  <div class="hud-left">
-    <div class="hud-pill">
-      <div class="balance-row"><span class="coin-dot"></span><span id="hudBalance">0</span> LORCA</div>
-      <div class="sub-row">SESSION <b id="hudSession">+0</b></div>
-    </div>
+  <div class="hud-pill">
+    <div class="balance-row"><span class="coin-dot"></span><span id="hudBalance">0</span> LORCA</div>
   </div>
-  <div class="hud-right">
-    <div class="hud-pill" style="text-align:right;">
-      <div id="levelBadge">LEVEL <span id="hudLevel">1</span></div>
-      <div id="distanceRow"><span id="hudDistance">0</span>m</div>
-    </div>
+  <div class="hud-pill" style="text-align:right;">
+    <div id="levelBadge">LEVEL <span id="hudLevel">1</span></div>
+    <div style="font-size:12px; color:var(--muted); margin-top:4px;"><span id="hudDistance">0</span>m</div>
   </div>
 </div>
 
 <button id="pauseBtn" class="hidden">❚❚</button>
-<div id="toast"></div>
 
-<!-- Controls Layer -->
 <div id="touchZone" class="hidden"></div>
-<div id="mobileHint" class="hidden">SWIPE UP TO BREACH · SWIPE LEFT/RIGHT TO DIVE LANES</div>
 
-<!-- MAIN MENU -->
+<!-- MENU -->
 <div id="menuOverlay" class="overlay">
   <div class="panel">
     <div class="brand">
       <div class="orca-emblem">🐋</div>
       <div class="title">LETHAL ORCA 3D</div>
-      <div class="sub">Ocean Breach P2E Runner</div>
+      <div style="font-size:12px; color:var(--muted); letter-spacing:2px; text-transform:uppercase;">Ocean Horizon P2E Runner</div>
     </div>
-    <button class="menu-btn primary" onclick="UI.startGame()">▶ START OCEAN RUN <small>Breach & Earn</small></button>
-    <button class="menu-btn gold" onclick="UI.show('rewardsOverlay')">🏆 REWARDS & CLAIM</button>
-    <button class="menu-btn" onclick="UI.show('walletOverlay')">👛 WALLET CONNECT</button>
-  </div>
-</div>
-
-<!-- REWARDS -->
-<div id="rewardsOverlay" class="overlay hidden">
-  <div class="panel">
-    <button class="menu-btn" onclick="UI.show('menuOverlay')">← BACK TO MENU</button>
-    <h3 style="color:var(--teal); margin-top:20px;">Claim Earnings</h3>
-    <p style="color:var(--muted); font-size:13px;">Your gameplay performance is validated on-chain.</p>
-    <button class="menu-btn gold" onclick="UI.submitClaim()">SUBMIT CLAIM TO PHANTOM</button>
-  </div>
-</div>
-
-<!-- WALLET -->
-<div id="walletOverlay" class="overlay hidden">
-  <div class="panel">
-    <button class="menu-btn" onclick="UI.show('menuOverlay')">← BACK TO MENU</button>
-    <h3 style="color:var(--teal); margin-top:20px;">Solana Wallet Integration</h3>
-    <button class="menu-btn primary" onclick="UI.connectWallet()">CONNECT PHANTOM</button>
+    <button class="menu-btn primary" onclick="UI.startGame()">▶ START OCEAN RUN</button>
+    <button class="menu-btn" onclick="UI.connectWallet()">👛 CONNECT PHANTOM</button>
   </div>
 </div>
 
 <!-- GAME OVER -->
 <div id="gameoverOverlay" class="overlay hidden">
   <div class="panel" style="text-align:center;">
-    <div class="brand"><div class="title" style="font-size:24px; color:var(--danger);">RUN TERMINATED</div></div>
-    <div style="display:flex; justify-content:space-around; margin:20px 0;">
-      <div><div style="font-size:24px; font-weight:900; color:var(--gold);" id="goCoins">0</div><div style="font-size:11px; color:var(--muted);">LORCA</div></div>
-      <div><div style="font-size:24px; font-weight:900; color:var(--teal);" id="goDistance">0m</div><div style="font-size:11px; color:var(--muted);">DISTANCE</div></div>
+    <div class="brand"><div class="title" style="font-size:26px; color:var(--danger);">RUN TERMINATED</div></div>
+    <div style="display:flex; justify-content:space-around; margin:24px 0;">
+      <div><div style="font-size:26px; font-weight:900; color:var(--gold);" id="goCoins">0</div><div style="font-size:12px; color:var(--muted);">LORCA</div></div>
+      <div><div style="font-size:26px; font-weight:900; color:var(--teal);" id="goDistance">0m</div><div style="font-size:12px; color:var(--muted);">DISTANCE</div></div>
     </div>
     <button class="menu-btn primary" onclick="UI.startGame()">▶ RE-ENTER OCEAN</button>
-    <button class="menu-btn" onclick="UI.show('menuOverlay')">MAIN MENU</button>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 const CONFIG = {
-  lanes: [-2.4, 0, 2.4],
-  baseSpeed: 16,
-  speedPerLevel: 2.2,
-  levelDistance: 280,
-  jumpForce: 16,
+  lanes: [-2.6, 0, 2.6],
+  baseSpeed: 18,
+  jumpForce: 17,
   gravity: -42,
-  spawnBase: 0.75,
-  coinChance: 0.7
+  spawnBase: 0.7
 };
 
 const STATE = {
   running:false, paused:false, lane:1, x:0, y:0, vy:0, grounded:true,
-  distance:0, level:1, sessionCoins:0, balance:0,
-  speed:CONFIG.baseSpeed, spawnTimer:0, spawnInterval:CONFIG.spawnBase,
-  obstacles:[], coins:[], particles:[], waterBubbles:[], wallet:null
+  distance:0, level:1, balance:0, speed:CONFIG.baseSpeed, spawnTimer:0,
+  obstacles:[], coins:[], particles:[], wallet:null
 };
 
-let scene, camera, renderer, clock, orca, orcaBody, tailFin, leftFin, rightFin;
+let scene, camera, renderer, clock, orca, tailFin, leftFin, rightFin;
 
 function initThree(){
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x030814);
-  scene.fog = new THREE.FogExp2(0x030814, 0.018);
+  scene.background = new THREE.Color(0x010712);
+  scene.fog = new THREE.FogExp2(0x010712, 0.015);
 
-  camera = new THREE.PerspectiveCamera(65, window.innerWidth/window.innerHeight, 0.1, 250);
-  camera.position.set(0, 4.5, -9);
+  // Wide Horizontal Camera Perspective
+  camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 300);
+  camera.position.set(0, 5, -10);
 
-  renderer = new THREE.WebGLRenderer({antialias:true, powerPreference: "high-performance"});
+  renderer = new THREE.WebGLRenderer({antialias:true, powerPreference:"high-performance"});
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.2;
   document.getElementById('canvasWrap').appendChild(renderer.domElement);
 
-  // Lights
-  const ambientLight = new THREE.AmbientLight(0x0a2540, 1.5);
-  scene.add(ambientLight);
+  // Cyber Lights
+  scene.add(new THREE.AmbientLight(0x0a2540, 1.8));
+  
+  const mainLight = new THREE.DirectionalLight(0x00f2fe, 3);
+  mainLight.position.set(-15, 35, -15);
+  mainLight.castShadow = true;
+  scene.add(mainLight);
 
-  const sunLight = new THREE.DirectionalLight(0x00f2fe, 2.5);
-  sunLight.position.set(-10, 30, -10);
-  sunLight.castShadow = true;
-  sunLight.shadow.mapSize.width = 2048;
-  sunLight.shadow.mapSize.height = 2048;
-  scene.add(sunLight);
-
-  const oceanRimLight = new THREE.PointLight(0x0072ff, 3, 50);
-  oceanRimLight.position.set(0, 8, 10);
-  scene.add(oceanRimLight);
+  const glowLight = new THREE.PointLight(0xffb703, 2, 40);
+  glowLight.position.set(0, 6, 12);
+  scene.add(glowLight);
 
   buildOceanTrack();
   build3DOrca();
-  initAmbientBubbles();
 
   window.addEventListener('resize', onResize);
 }
@@ -202,24 +148,20 @@ function onResize(){
 }
 
 function buildOceanTrack(){
-  // Neon Cyber-Ocean Track
-  const trackGeo = new THREE.PlaneGeometry(16, 400, 1, 100);
-  const trackMat = new THREE.MeshStandardMaterial({
-    color:0x051329, roughness:0.2, metalness:0.8
-  });
+  const trackGeo = new THREE.PlaneGeometry(18, 500);
+  const trackMat = new THREE.MeshStandardMaterial({color:0x03122b, roughness:0.1, metalness:0.9});
   const track = new THREE.Mesh(trackGeo, trackMat);
   track.rotation.x = -Math.PI/2;
-  track.position.z = 150;
+  track.position.z = 200;
   track.receiveShadow = true;
   scene.add(track);
 
-  // Glowing Lane Lines
   CONFIG.lanes.forEach(lx => {
-    const lineGeo = new THREE.PlaneGeometry(0.08, 400);
+    const lineGeo = new THREE.PlaneGeometry(0.1, 500);
     const lineMat = new THREE.MeshBasicMaterial({color:0x00f2fe});
     const line = new THREE.Mesh(lineGeo, lineMat);
     line.rotation.x = -Math.PI/2;
-    line.position.set(lx, 0.02, 150);
+    line.position.set(lx, 0.02, 200);
     scene.add(line);
   });
 }
@@ -227,80 +169,58 @@ function buildOceanTrack(){
 function build3DOrca(){
   orca = new THREE.Group();
 
-  const blackMat = new THREE.MeshStandardMaterial({color:0x050508, roughness:0.1, metalness:0.3});
-  const whiteMat = new THREE.MeshStandardMaterial({color:0xf0f6fc, roughness:0.3});
+  const blackMat = new THREE.MeshStandardMaterial({color:0x050508, roughness:0.1, metalness:0.4});
+  const whiteMat = new THREE.MeshStandardMaterial({color:0xf0f6fc, roughness:0.2});
 
-  // Main Aerodynamic Orca Body
-  const bodyGeo = new THREE.ConeGeometry(0.75, 3.2, 16);
+  const bodyGeo = new THREE.ConeGeometry(0.8, 3.4, 20);
   bodyGeo.rotateX(Math.PI/2);
-  orcaBody = new THREE.Mesh(bodyGeo, blackMat);
-  orcaBody.scale.set(1, 0.7, 1);
-  orcaBody.castShadow = true;
-  orca.add(orcaBody);
+  const body = new THREE.Mesh(bodyGeo, blackMat);
+  body.scale.set(1, 0.7, 1);
+  body.castShadow = true;
+  orca.add(body);
 
-  // White Belly Patch
-  const bellyGeo = new THREE.SphereGeometry(0.65, 16, 16);
+  const bellyGeo = new THREE.SphereGeometry(0.7, 16, 16);
   const belly = new THREE.Mesh(bellyGeo, whiteMat);
   belly.scale.set(0.8, 0.4, 1.8);
   belly.position.set(0, -0.2, 0);
   orca.add(belly);
 
-  // White Eye Patches
-  [-0.45, 0.45].forEach(x => {
-    const patchGeo = new THREE.SphereGeometry(0.18, 12, 12);
-    const patch = new THREE.Mesh(patchGeo, whiteMat);
+  [-0.48, 0.48].forEach(x => {
+    const patch = new THREE.Mesh(new THREE.SphereGeometry(0.18, 12, 12), whiteMat);
     patch.scale.set(0.3, 0.6, 1.2);
     patch.position.set(x, 0.25, 0.6);
-    patch.rotation.z = x > 0 ? -0.3 : 0.3;
     orca.add(patch);
   });
 
-  // Dorsal Fin (Top)
-  const dorsalGeo = new THREE.ConeGeometry(0.2, 1.2, 8);
-  dorsalGeo.rotateX(-0.4);
-  const dorsal = new THREE.Mesh(dorsalGeo, blackMat);
-  dorsal.position.set(0, 0.8, -0.2);
+  const dorsal = new THREE.Mesh(new THREE.ConeGeometry(0.2, 1.3, 8), blackMat);
+  dorsal.rotation.x = -0.4;
+  dorsal.position.set(0, 0.85, -0.2);
   orca.add(dorsal);
 
-  // Side Pectoral Fins
-  const finGeo = new THREE.BoxGeometry(0.8, 0.08, 0.4);
+  const finGeo = new THREE.BoxGeometry(0.9, 0.08, 0.4);
   leftFin = new THREE.Mesh(finGeo, blackMat);
-  leftFin.position.set(-0.7, -0.1, 0.2);
-  leftFin.rotation.z = -0.3;
+  leftFin.position.set(-0.75, -0.1, 0.2);
   orca.add(leftFin);
 
   rightFin = new THREE.Mesh(finGeo, blackMat);
-  rightFin.position.set(0.7, -0.1, 0.2);
-  rightFin.rotation.z = 0.3;
+  rightFin.position.set(0.75, -0.1, 0.2);
   orca.add(rightFin);
 
-  // Tail Fluke
-  const tailGeo = new THREE.BoxGeometry(1.2, 0.06, 0.5);
-  tailFin = new THREE.Mesh(tailGeo, blackMat);
-  tailFin.position.set(0, 0, -1.6);
+  tailFin = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.06, 0.5), blackMat);
+  tailFin.position.set(0, 0, -1.7);
   orca.add(tailFin);
 
   orca.position.set(0, 0.6, 0);
   scene.add(orca);
 }
 
-function initAmbientBubbles(){
-  for(let i=0; i<60; i++){
-    const geo = new THREE.SphereGeometry(Math.random()*0.12 + 0.04, 8, 8);
-    const mat = new THREE.MeshBasicMaterial({color:0x00f2fe, transparent:true, opacity:0.4});
-    const bubble = new THREE.Mesh(geo, mat);
-    bubble.position.set((Math.random()-0.5)*30, Math.random()*15, Math.random()*200);
-    scene.add(bubble);
-    STATE.waterBubbles.push(bubble);
-  }
-}
-
 function spawnObstacle(){
   const lane = CONFIG.lanes[Math.floor(Math.random()*3)];
-  const geo = new THREE.BoxGeometry(1.8, 1.2, 0.8);
-  const mat = new THREE.MeshStandardMaterial({color:0xff0055, emissive:0xaa0033, roughness:0.2});
-  const obstacle = new THREE.Mesh(geo, mat);
-  obstacle.position.set(lane, 0.6, STATE.distance + 50);
+  const obstacle = new THREE.Mesh(
+    new THREE.BoxGeometry(1.8, 1.2, 0.8),
+    new THREE.MeshStandardMaterial({color:0xff0055, emissive:0xaa0033, roughness:0.2})
+  );
+  obstacle.position.set(lane, 0.6, STATE.distance + 60);
   obstacle.castShadow = true;
   scene.add(obstacle);
   STATE.obstacles.push(obstacle);
@@ -308,11 +228,12 @@ function spawnObstacle(){
 
 function spawnCoin(){
   const lane = CONFIG.lanes[Math.floor(Math.random()*3)];
-  const geo = new THREE.CylinderGeometry(0.4, 0.4, 0.1, 16);
-  const mat = new THREE.MeshStandardMaterial({color:0xffb703, metalness:0.9, roughness:0.1, emissive:0xff8800, emissiveIntensity:0.4});
-  const coin = new THREE.Mesh(geo, mat);
+  const coin = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.4, 0.4, 0.1, 20),
+    new THREE.MeshStandardMaterial({color:0xffb703, metalness:0.9, roughness:0.1, emissive:0xff8800, emissiveIntensity:0.5})
+  );
   coin.rotation.x = Math.PI/2;
-  coin.position.set(lane, 1.2, STATE.distance + 50);
+  coin.position.set(lane, 1.2, STATE.distance + 60);
   scene.add(coin);
   STATE.coins.push(coin);
 }
@@ -328,27 +249,12 @@ function doJump(){
   }
 }
 
-window.addEventListener('keydown', (e) => {
+window.addEventListener('keydown', e => {
   if(!STATE.running || STATE.paused) return;
   if(e.code === 'ArrowLeft' || e.code === 'KeyA') changeLane(-1);
   if(e.code === 'ArrowRight' || e.code === 'KeyD') changeLane(1);
   if(e.code === 'ArrowUp' || e.code === 'Space') doJump();
 });
-
-// Touch Inputs
-let touchX = 0, touchY = 0;
-document.getElementById('touchZone').addEventListener('touchstart', e => {
-  touchX = e.touches[0].clientX;
-  touchY = e.touches[0].clientY;
-}, {passive:true});
-
-document.getElementById('touchZone').addEventListener('touchend', e => {
-  if(!STATE.running) return;
-  const dx = e.changedTouches[0].clientX - touchX;
-  const dy = e.changedTouches[0].clientY - touchY;
-  if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 30) changeLane(dx > 0 ? 1 : -1);
-  else if(dy < -30) doJump();
-}, {passive:true});
 
 clock = new THREE.Clock();
 
@@ -360,57 +266,41 @@ function animate(){
     updateGame(dt);
   }
 
-  // Ambient Bubble Animation
-  STATE.waterBubbles.forEach(b => {
-    b.position.y += dt * 1.5;
-    if(b.position.y > 15) b.position.y = 0;
-  });
-
   renderer.render(scene, camera);
 }
 
 function updateGame(dt){
   STATE.distance += STATE.speed * dt;
 
-  // Smooth Movement
   const targetX = CONFIG.lanes[STATE.lane];
   STATE.x += (targetX - STATE.x) * Math.min(1, dt * 12);
 
-  // Jump Physics
   if(!STATE.grounded){
     STATE.vy += CONFIG.gravity * dt;
     STATE.y += STATE.vy * dt;
-    if(STATE.y <= 0){
-      STATE.y = 0; STATE.vy = 0; STATE.grounded = true;
-    }
+    if(STATE.y <= 0){ STATE.y = 0; STATE.vy = 0; STATE.grounded = true; }
   }
 
-  // Orca Position & Realistic Swimming Animation
   orca.position.set(STATE.x, STATE.y + 0.6, STATE.distance);
-  const swimTime = performance.now() * 0.008;
+  const swimTime = performance.now() * 0.009;
   
-  orca.rotation.z = (targetX - STATE.x) * -0.2;
+  orca.rotation.z = (targetX - STATE.x) * -0.22;
   orca.rotation.x = STATE.vy * 0.03;
-  tailFin.rotation.y = Math.sin(swimTime * 2) * 0.4;
-  leftFin.rotation.z = -0.3 + Math.sin(swimTime) * 0.1;
-  rightFin.rotation.z = 0.3 - Math.sin(swimTime) * 0.1;
+  tailFin.rotation.y = Math.sin(swimTime * 2) * 0.45;
 
-  // Dynamic Camera Following
-  camera.position.set(STATE.x * 0.3, 4.5 + STATE.y * 0.2, STATE.distance - 9);
-  camera.lookAt(STATE.x * 0.3, 1.2 + STATE.y * 0.3, STATE.distance + 10);
+  camera.position.set(STATE.x * 0.35, 5 + STATE.y * 0.2, STATE.distance - 10);
+  camera.lookAt(STATE.x * 0.35, 1.4 + STATE.y * 0.3, STATE.distance + 12);
 
-  // Spawning Logic
   STATE.spawnTimer += dt;
-  if(STATE.spawnTimer > STATE.spawnInterval){
+  if(STATE.spawnTimer > CONFIG.spawnBase){
     STATE.spawnTimer = 0;
-    if(Math.random() < CONFIG.coinChance) spawnCoin();
+    if(Math.random() < 0.6) spawnCoin();
     else spawnObstacle();
   }
 
-  // Collisions & Cleanup
   for(let i = STATE.obstacles.length-1; i>=0; i--){
     const o = STATE.obstacles[i];
-    if(o.position.z < STATE.distance - 5){ scene.remove(o); STATE.obstacles.splice(i,1); continue; }
+    if(o.position.z < STATE.distance - 6){ scene.remove(o); STATE.obstacles.splice(i,1); continue; }
     if(Math.abs(o.position.z - orca.position.z) < 0.8 && Math.abs(o.position.x - orca.position.x) < 0.9 && STATE.y < 0.8){
       endRun(); return;
     }
@@ -419,9 +309,8 @@ function updateGame(dt){
   for(let i = STATE.coins.length-1; i>=0; i--){
     const c = STATE.coins[i];
     c.rotation.z += dt * 5;
-    if(c.position.z < STATE.distance - 5){ scene.remove(c); STATE.coins.splice(i,1); continue; }
+    if(c.position.z < STATE.distance - 6){ scene.remove(c); STATE.coins.splice(i,1); continue; }
     if(Math.abs(c.position.z - orca.position.z) < 1.0 && Math.abs(c.position.x - orca.position.x) < 0.9){
-      STATE.sessionCoins += 50;
       STATE.balance += 50;
       scene.remove(c); STATE.coins.splice(i,1);
       updateHud();
@@ -433,13 +322,12 @@ function updateGame(dt){
 
 function updateHud(){
   document.getElementById('hudBalance').textContent = STATE.balance;
-  document.getElementById('hudSession').textContent = '+' + STATE.sessionCoins;
   document.getElementById('hudDistance').textContent = Math.floor(STATE.distance);
 }
 
 function endRun(){
   STATE.running = false;
-  document.getElementById('goCoins').textContent = STATE.sessionCoins;
+  document.getElementById('goCoins').textContent = STATE.balance;
   document.getElementById('goDistance').textContent = Math.floor(STATE.distance) + 'm';
   UI.hideAll();
   document.getElementById('gameoverOverlay').classList.remove('hidden');
@@ -447,30 +335,25 @@ function endRun(){
 }
 
 const UI = {
-  overlays:['menuOverlay','rewardsOverlay','walletOverlay','gameoverOverlay'],
+  overlays:['menuOverlay','gameoverOverlay'],
   hideAll(){ this.overlays.forEach(id => document.getElementById(id).classList.add('hidden')); },
-  show(id){ this.hideAll(); document.getElementById(id).classList.remove('hidden'); },
   startGame(){
     this.hideAll();
     STATE.obstacles.forEach(o => scene.remove(o));
     STATE.coins.forEach(c => scene.remove(c));
     STATE.obstacles = []; STATE.coins = [];
-    STATE.distance = 0; STATE.sessionCoins = 0; STATE.lane = 1; STATE.x = 0; STATE.y = 0;
+    STATE.distance = 0; STATE.balance = 0; STATE.lane = 1; STATE.x = 0; STATE.y = 0;
     STATE.running = true;
     document.getElementById('hud').classList.remove('hidden');
     document.getElementById('pauseBtn').classList.remove('hidden');
-    document.getElementById('touchZone').classList.remove('hidden');
-    document.getElementById('mobileHint').classList.remove('hidden');
-    setTimeout(()=> document.getElementById('mobileHint').classList.add('hidden'), 3000);
   },
   async connectWallet(){
     if(window.solana && window.solana.isPhantom){
       const resp = await window.solana.connect();
       STATE.wallet = resp.publicKey.toString();
-      alert('Connected Wallet: ' + STATE.wallet);
-    } else alert('Phantom Wallet not found!');
-  },
-  submitClaim(){ alert('Claim submitted for validation!'); }
+      alert('Connected: ' + STATE.wallet);
+    } else alert('Phantom Wallet not detected!');
+  }
 };
 
 initThree();
