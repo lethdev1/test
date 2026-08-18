@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>LORCA Toad Runner | LethalOrca</title>
+<style>
+  :root{
+    --abyss:#060a14;
+    --panel:#0d1526;
+    --panel2:#101c33;
+    --teal:#18e0c4;
+    --teal-dim:#0e6e63;
+    --gold:#f4c15c;
+    --gold-dim:#8a6a2a;
+    --danger:#ff4d6a;
+    --text:#e7edf6;
+    --muted:#7c8aa3;
+    --line:rgba(24,224,196,0.18);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; padding:0; width:100%; height:100%; overflow:hidden; background:var(--abyss); font-family:'Segoe UI',system-ui,sans-serif; color:var(--text);}
+  #canvasWrap{position:fixed; inset:0;}
+  canvas{display:block; width:100%; height:100%;}
+
+  /* ---------- HUD ---------- */
+  #hud{position:fixed; top:0; left:0; right:0; padding:14px 16px; display:flex; justify-content:space-between; align-items:flex-start; pointer-events:none; z-index:20; font-family:'Consolas','SFMono-Regular',monospace;}
+  .hud-pill{background:linear-gradient(180deg, rgba(13,21,38,0.92), rgba(10,15,28,0.88)); border:1px solid var(--line); border-radius:12px; padding:8px 14px; backdrop-filter:blur(6px); box-shadow:0 4px 18px rgba(0,0,0,0.4);}
+  .hud-left{display:flex; flex-direction:column; gap:6px;}
+  .hud-right{display:flex; flex-direction:column; gap:6px; align-items:flex-end;}
+  .balance-row{display:flex; align-items:center; gap:8px; font-size:15px; font-weight:700; color:var(--gold); letter-spacing:0.5px;}
+  .balance-row .coin-dot{width:10px; height:10px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #fff2c4, var(--gold) 60%, var(--gold-dim)); box-shadow:0 0 8px var(--gold);}
+  .sub-row{font-size:11px; color:var(--muted); letter-spacing:0.5px; display:flex; gap:10px;}
+  .sub-row b{color:var(--teal);}
+  #levelBadge{font-size:12px; color:var(--teal); border:1px solid var(--teal-dim); padding:4px 10px; border-radius:999px; background:rgba(24,224,196,0.06);}
+  #distanceRow{font-size:12px; color:var(--muted);}
+
+  /* floating reward */
+  .float-reward{position:absolute; font-weight:800; font-size:22px; color:var(--gold); text-shadow:0 0 12px rgba(244,193,92,0.7); pointer-events:none; z-index:30; animation:floatUp 0.9s ease-out forwards;}
+  @keyframes floatUp{0%{opacity:0; transform:translateY(0) scale(0.6);} 15%{opacity:1; transform:translateY(-10px) scale(1.15);} 100%{opacity:0; transform:translateY(-70px) scale(1);}}
+
+  /* ---------- Overlays ---------- */
+  .overlay{position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; background:radial-gradient(ellipse at 50% 20%, rgba(15,25,45,0.55), rgba(3,5,10,0.92)); backdrop-filter:blur(3px);}
+  .hidden{display:none !important;}
+  .panel{width:min(420px, 92vw); background:linear-gradient(180deg, var(--panel), var(--panel2)); border:1px solid var(--line); border-radius:20px; padding:26px 24px; box-shadow:0 20px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.03); max-height:88vh; overflow-y:auto;}
+  .brand{text-align:center; margin-bottom:6px;}
+  .brand .title{font-size:26px; font-weight:900; letter-spacing:1px; background:linear-gradient(90deg, var(--teal), var(--gold)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .brand .sub{font-size:11px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; margin-top:2px;}
+  .toad-emblem{width:72px; height:72px; margin:6px auto 10px; display:flex; align-items:center; justify-content:center; border-radius:50%; background:radial-gradient(circle at 35% 30%, #1c3a2f, #06120d); border:1px solid var(--teal-dim); font-size:38px;}
+
+  .menu-btn{display:flex; align-items:center; justify-content:space-between; width:100%; padding:14px 18px; margin-top:10px; border-radius:14px; border:1px solid var(--line); background:linear-gradient(180deg, rgba(24,224,196,0.08), rgba(24,224,196,0.02)); color:var(--text); font-size:15px; font-weight:700; cursor:pointer; transition:.15s; letter-spacing:0.3px;}
+  .menu-btn:hover{border-color:var(--teal); background:linear-gradient(180deg, rgba(24,224,196,0.18), rgba(24,224,196,0.04)); transform:translateY(-1px);}
+  .menu-btn.primary{background:linear-gradient(180deg, var(--teal), #0e9a86); color:#032621; border:none; box-shadow:0 6px 20px rgba(24,224,196,0.25);}
+  .menu-btn.primary:hover{filter:brightness(1.08);}
+  .menu-btn.gold{background:linear-gradient(180deg, var(--gold), #c98f2b); color:#2b1c02; border:none;}
+  .menu-btn small{opacity:0.7; font-weight:500;}
+
+  .back-link{display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--muted); cursor:pointer; margin-bottom:14px; letter-spacing:0.5px;}
+  .back-link:hover{color:var(--teal);}
+
+  h3.panel-title{margin:0 0 14px; font-size:17px; letter-spacing:0.5px; color:var(--teal);}
+  .row-line{display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px dashed var(--line); font-size:13px;}
+  .row-line:last-child{border-bottom:none;}
+  .row-line .k{color:var(--muted);}
+  .row-line .v{font-weight:700; color:var(--text);}
+
+  input, textarea{width:100%; padding:12px 14px; border-radius:10px; border:1px solid var(--line); background:#08101f; color:var(--text); font-size:13px; margin-top:6px; font-family:inherit;}
+  input:focus, textarea:focus{outline:none; border-color:var(--teal);}
+  label
